@@ -43,13 +43,13 @@ public class CordovaUri {
      * We always expect a FileProvider string to be passed in for the file that we create
      *
      */
-    CordovaUri (Uri inputUri)
+    CordovaUri (Uri inputUri, Context context)
     {
         //Determine whether the file is a content or file URI
         if(inputUri.getScheme().equals("content"))
         {
             androidUri = inputUri;
-            fileName = getFileNameFromUri(androidUri);
+            fileName = getFileNameFromUri(androidUri, context);
             fileUri = Uri.parse("file://" + fileName);
         }
         else
@@ -93,10 +93,10 @@ public class CordovaUri {
   * we own the context in this case.
  */
 
-    private String getFileNameFromUri(Uri uri) {
+    private String getFileNameFromUri(Uri uri, Context context) {
         String fullUri = uri.toString();
         String partial_path = fullUri.split("external_files")[1];
-        File external_storage = Environment.getExternalStorageDirectory();
+        File external_storage = context.getExternalFilesDir();
         String path = external_storage.getAbsolutePath() + partial_path;
         return path;
 
